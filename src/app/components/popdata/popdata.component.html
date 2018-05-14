@@ -1,0 +1,72 @@
+<div class="container">
+    <div class="detail-container" align="center">
+      <h4>Data Table</h4>
+      <input class="form-control" type="text" name="search" [(ngModel)]="search" placeholder="Search">
+       <table class="table-detail">
+        <thead>
+        <tr>
+          <th (click)="sort('name')">Name
+              <span class="glyphicon sort-icon" *ngIf="key =='Name'" [ngClass]="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+          </th>
+          <th (click)="sort('pop')">Population
+              <span class="glyphicon sort-icon" *ngIf="key =='pop'" [ngClass]="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+          </th>
+          <th>Latitude</th>
+          <th>Longitude</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+        <tr *ngFor="let pd of allPopData | filter : search | orderBy: key : reverse  | paginate : { itemsPerPage: 20, currentPage: p }; let i = index" >
+              <td>{{pd.name}}</td> 
+              <td>{{pd.pop}}</td> 
+              <td>{{pd.lat}}</td> 
+              <td>{{pd.lon}}</td>
+        <td><button type="button" (click)="loadPopDataToEdit(pd.id)">Edit</button> </td> 
+        <td><button type="button" (click)="deletePopData(pd.id)">Delete</button></td>
+        </tr>
+      </table> 
+      <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    </div>
+    <div class= "table-container" align="center">
+        <h4 *ngIf="popDataIdToUpdate; else create"> 
+          Update data for Id: {{ popDataIdToUpdate }}
+        </h4>
+        <ng-template #create>
+          <h4> Add new city data </h4>
+        </ng-template>
+        <br>
+       <form [formGroup]="popDataForm" (ngSubmit)="onPopDataFormSubmit()">
+          <table class="table-add">
+            <tr><td>Enter Name</td><td><input formControlName="name">
+                  <label *ngIf="popDataForm.get('name').invalid && processValidation" [ngClass] = "'error'"> Name is required. </label>
+            </td></tr>
+            <tr><td>Enter Population</td><td><input formControlName="pop">
+                  <label *ngIf="popDataForm.get('pop').invalid && processValidation" [ngClass] = "'error'"> Population is required. </label>
+            </td></tr>
+            <tr><td>Enter Latitude</td><td><input formControlName="lat">
+              <label *ngIf="popDataForm.get('lat').invalid && processValidation" [ngClass] = "'error'"> Latitude is required. </label>
+            </td></tr>
+            <tr><td>Enter Longitude</td><td><input formControlName="lon">
+              <label *ngIf="popDataForm.get('lon').invalid && processValidation" [ngClass] = "'error'"> Longitude is required. </label>
+            </td></tr>
+            <tr><td colspan="2">
+              <button *ngIf="!popDataIdToUpdate">CREATE</button>  
+              <button *ngIf="popDataIdToUpdate">UPDATE</button>  
+              <button (click)="backToCreatePopData()" *ngIf="popDataIdToUpdate">Go Back</button>  
+            </td></tr>
+          </table>
+       </form> 
+       <br/>
+       <div *ngIf="statusCode; else processing">
+         <div *ngIf="statusCode === 201" [ngClass] = "'success'">Population data added successfully.</div>   
+         <div *ngIf="statusCode === 409" [ngClass] = "'success'">Population data already exists.</div>   	
+         <div *ngIf="statusCode === 200" [ngClass] = "'success'">Population data updated successfully.</div>   	      
+         <div *ngIf="statusCode === 204" [ngClass] = "'success'">Population data deleted successfully.</div>   	   
+         <div *ngIf="statusCode === 500" [ngClass] = "'error'">Internal Server Error.</div>   	
+       </div>
+       <ng-template #processing>
+        <img *ngIf="requestProcessing" src="assets/images/loading.png">
+       </ng-template>
+      </div>
+</div>

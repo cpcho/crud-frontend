@@ -1,0 +1,43 @@
+.container {
+    text-align:center
+}
+
+h4 { 
+   color: rgb(92, 101, 230);
+}
+table {
+    border-collapse: collapse;
+}
+table, th, td {
+    border: 1px solid black;
+    font-size:12px;
+}
+label {
+    font-size:12px;
+}
+.input-form-control {
+    float: right;
+    position: inherit;
+}
+.form-control {
+    width: 200px;
+    margin: 8px 0;
+    background-color: #dfdfdf;
+    font-size:12px;
+}
+button {
+    background-color: rgb(103, 201, 103);
+    color: white;
+}
+.error{
+    color: red;
+    font-size: 20px;
+}
+.success{
+    color: green;
+    font-size: 20px;
+}
+
+thead>tr>th {
+    cursor: pointer;
+}
